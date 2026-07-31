@@ -1,11 +1,13 @@
 from ai.llm import ask_eon
 from core.config import WELCOME_MESSAGE
 from ui.spinner import Spinner
-
+from memory.session import SessionMemory
 
 def main():
 
     print(WELCOME_MESSAGE)
+
+    session_memory = SessionMemory()  # type: ignore
 
     while True:
 
@@ -23,7 +25,12 @@ def main():
 
             try:
                 spinner.start()
-                reply = ask_eon(user_input)
+                session_memory.add_user(user_input)
+
+                messages = session_memory.get_messages()
+
+                reply = ask_eon(messages)
+                session_memory.add_assistant(reply)
             finally:
                 spinner.stop()
 
