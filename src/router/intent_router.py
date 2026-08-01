@@ -46,4 +46,7 @@ class IntentRouter:
         ]):
             return "system"
 
+        if text.startswith("open "):
+            return "open"
+
         return "chat"

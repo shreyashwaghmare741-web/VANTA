@@ -1,10 +1,13 @@
+import importlib
+
 from ai.llm import ask_eon
 from core.config import WELCOME_MESSAGE
 from ui.spinner import Spinner
 from memory.session import SessionMemory
-
 from router.intent_router import IntentRouter
 from skills.calculator import calculate
+
+open_target = importlib.import_module("skills.automation").open_target
 from skills.system import (
     battery,
     cpu,
@@ -36,6 +39,16 @@ def main():
         # Step 1 : Decide what to do
         # -----------------------------
         intent = router.route(user_input)
+
+        if intent == "open":
+
+            target = user_input.replace("open", "", 1).strip()
+
+            result = open_target(target) # type: ignore
+
+            print(f"\nEON > {result}")
+
+            continue
 
         # -----------------------------
         # Step 2 : Calculator Skill
