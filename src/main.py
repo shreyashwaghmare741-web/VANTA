@@ -5,6 +5,13 @@ from memory.session import SessionMemory
 
 from router.intent_router import IntentRouter
 from skills.calculator import calculate
+from skills.system import (
+    battery,
+    cpu,
+    ram,
+    disk,
+    system_info,
+)
 
 
 def main():
@@ -38,6 +45,41 @@ def main():
             result = calculate(user_input)
 
             print(f"\nEON > {result}")
+
+            continue
+
+        # Battery
+        if intent == "battery":
+
+            print(f"\nEON >\n{battery()}")
+
+            continue
+
+        # CPU
+        if intent == "cpu":
+
+            print(f"\nEON >\n{cpu()}")
+
+            continue
+
+        # RAM
+        if intent == "ram":
+
+            print(f"\nEON >\n{ram()}")
+
+            continue
+
+        # Disk
+        if intent == "disk":
+
+            print(f"\nEON >\n{disk()}")
+
+            continue
+
+        # System Info
+        if intent == "system":
+
+            print(f"\nEON >\n{system_info()}")
 
             continue
 

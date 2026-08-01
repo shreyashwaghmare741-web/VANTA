@@ -1,7 +1,7 @@
 from typing import TypedDict
 
 from ollama import chat  # type: ignore
-from core.config import MODEL_NAME
+from src.core.config import MODEL_NAME
 
 
 class ChatMessage(TypedDict):
