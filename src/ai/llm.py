@@ -9,7 +9,7 @@ class ChatMessage(TypedDict):
     content: str
 
 
-def ask_eon(messages: list[ChatMessage]) -> str:
+def ask_vanta(messages: list[ChatMessage]) -> str:
     response = chat(
         model=MODEL_NAME,
         messages=messages,

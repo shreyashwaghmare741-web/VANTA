@@ -13,7 +13,7 @@ sys.path.insert(0, SRC_DIR)
 # Move into src so relative paths work
 os.chdir(SRC_DIR)
 
-# Start EON
+# Start VANTA
 from main import main
 
 if __name__ == "__main__":

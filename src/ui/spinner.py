@@ -16,7 +16,7 @@ class Spinner:
             if not self.running:
                 break
 
-            print(f"\r[EON] {self.text} {symbol}", end="", flush=True)
+            print(f"\r[VANTA] {self.text} {symbol}", end="", flush=True)
 
             time.sleep(0.1)
 

@@ -1,20 +1,49 @@
-import importlib
+from typing import Any, Callable
 
-from ai.llm import ask_eon
-from core.config import WELCOME_MESSAGE
+from ai.llm import ask_vanta
+from core.config import WELCOME_MESSAGE, GOODBYE_MESSAGE
 from ui.spinner import Spinner
 from memory.session import SessionMemory
 from router.intent_router import IntentRouter
-from skills.calculator import calculate
 
-open_target = importlib.import_module("skills.automation").open_target
-from skills.system import (
-    battery,
-    cpu,
-    ram,
-    disk,
-    system_info,
-)
+from skills.calculator import calculate
+from skills.system import battery, cpu, ram, disk, system_info
+from skills.automation import open_target
+
+
+class VantaSkillManager:
+    """Registers and executes all built-in VANTA skills."""
+
+    def __init__(self):
+        self._skills: dict[str, Callable[..., Any]] = {}
+
+        self.register_skill("calculator", calculate)
+        self.register_skill("battery", battery)
+        self.register_skill("cpu", cpu)
+        self.register_skill("ram", ram)
+        self.register_skill("disk", disk)
+        self.register_skill("system", system_info)
+        self.register_skill("open", open_target)
+
+    def register_skill(self, name: str, handler: Callable[..., Any]) -> None:
+        self._skills[name.lower()] = handler
+
+    def execute(self, intent: str, user_input: str):
+
+        handler = self._skills.get(intent.lower())
+
+        if handler is None:
+            return None
+
+        if intent == "calculator":
+            return handler(user_input)
+
+        elif intent == "open":
+            target = user_input.replace("open", "", 1).strip()
+            return handler(target)
+
+        else:
+            return handler()
 
 
 def main():
@@ -25,79 +54,36 @@ def main():
 
     router = IntentRouter()
 
+    skill_manager = VantaSkillManager()
+
     while True:
 
         user_input = input("\nYou > ")
 
         if user_input.lower() in ["exit", "quit"]:
 
-            print("\nEON > Goodbye. Systems shutting down.")
+            print(GOODBYE_MESSAGE)
 
             break
 
         # -----------------------------
-        # Step 1 : Decide what to do
+        # Decide Intent
         # -----------------------------
         intent = router.route(user_input)
 
-        if intent == "open":
+        # -----------------------------
+        # Execute Local Skill
+        # -----------------------------
+        result = skill_manager.execute(intent, user_input)
 
-            target = user_input.replace("open", "", 1).strip()
+        if result is not None:
 
-            result = open_target(target) # type: ignore
-
-            print(f"\nEON > {result}")
+            print(f"\nVANTA > {result}")
 
             continue
 
         # -----------------------------
-        # Step 2 : Calculator Skill
-        # -----------------------------
-        if intent == "calculator":
-
-            result = calculate(user_input)
-
-            print(f"\nEON > {result}")
-
-            continue
-
-        # Battery
-        if intent == "battery":
-
-            print(f"\nEON >\n{battery()}")
-
-            continue
-
-        # CPU
-        if intent == "cpu":
-
-            print(f"\nEON >\n{cpu()}")
-
-            continue
-
-        # RAM
-        if intent == "ram":
-
-            print(f"\nEON >\n{ram()}")
-
-            continue
-
-        # Disk
-        if intent == "disk":
-
-            print(f"\nEON >\n{disk()}")
-
-            continue
-
-        # System Info
-        if intent == "system":
-
-            print(f"\nEON >\n{system_info()}")
-
-            continue
-
-        # -----------------------------
-        # Step 3 : AI Chat
+        # AI Chat
         # -----------------------------
         try:
 
@@ -111,7 +97,7 @@ def main():
 
                 spinner.start()
 
-                reply = ask_eon(messages)
+                reply = ask_vanta(messages)
 
                 session_memory.add_assistant(reply)
 
@@ -119,11 +105,11 @@ def main():
 
                 spinner.stop()
 
-            print(f"\nEON > {reply}")
+            print(f"\nVANTA > {reply}")
 
         except Exception as e:
 
-            print("\nEON Error:", e)
+            print(f"\nVANTA Error: {e}")
 
 
 if __name__ == "__main__":

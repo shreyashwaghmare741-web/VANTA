@@ -1,5 +1,6 @@
 APP_DATABASE = {
-    "chrome": "start chrome",
+    "brave": "start brave",
+    "browser": "start brave",
     "edge": "start msedge",
     "vscode": "code",
     "github": "https://github.com",

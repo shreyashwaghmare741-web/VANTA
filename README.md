@@ -1,8 +1,10 @@
-# EON (Enhanced Operations Nexus)
+# VANTA
 
-EON is a locally running AI Operating Intelligence designed to be fast, private, and modular.
+Virtual Autonomous Neural Task Assistant
 
-Unlike traditional AI assistants, EON routes tasks to specialized skills whenever possible instead of sending everything to a language model.
+A privacy-first local AI operating assistant capable of reasoning, memory, automation, vision, and voice interaction.
+
+Think. Understand. Act.
 
 ## Features
 
@@ -28,4 +30,4 @@ Unlike traditional AI assistants, EON routes tasks to specialized skills wheneve
 
 ## Version
 
-Current Version: **v0.0.4**
+Current Version: **v0.0.7**
