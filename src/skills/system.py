@@ -1,3 +1,4 @@
+from skills.registry import register
 import platform
 import psutil
 
@@ -58,3 +59,8 @@ def system_info():
         f"Release : {platform.release()}\n"
         f"Processor : {platform.processor()}"
     )
+register("battery", battery)
+register("cpu", cpu)
+register("ram", ram)
+register("disk", disk)
+register("system", system_info)

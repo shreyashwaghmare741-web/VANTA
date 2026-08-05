@@ -1,43 +1,26 @@
-from skills.calculator import calculate
-from skills.system import battery, cpu, ram, disk, system_info
-from skills.automation import open_target
+from skills.registry import get
+from skills.loader import load_skills
 
 
 class SkillManager:
 
+    def __init__(self):
+
+        # Import every skill automatically
+        load_skills()
+
     def execute(self, intent: str, user_input: str):
 
-        # -------------------------
-        # Calculator
-        # -------------------------
+        handler = get(intent)
+
+        if handler is None:
+            return None
+
         if intent == "calculator":
-            return calculate(user_input)
+            return handler(user_input)
 
-        # -------------------------
-        # System Monitoring
-        # -------------------------
-        elif intent == "battery":
-            return battery()
-
-        elif intent == "cpu":
-            return cpu()
-
-        elif intent == "ram":
-            return ram()
-
-        elif intent == "disk":
-            return disk()
-
-        elif intent == "system":
-            return system_info()
-
-        # -------------------------
-        # Desktop Automation
-        # -------------------------
         elif intent == "open":
-            return open_target(user_input)
+            target = user_input.replace("open", "", 1).strip()
+            return handler(target)
 
-        # -------------------------
-        # AI Required
-        # -------------------------
-        return None
+        return handler()

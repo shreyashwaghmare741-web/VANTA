@@ -1,3 +1,4 @@
+from skills.registry import register
 import os
 import subprocess
 import webbrowser
@@ -33,3 +34,4 @@ def open_target(target: str):
     subprocess.Popen(value, shell=True)
 
     return f"Opening {target}..."
+register("open", open_target)
